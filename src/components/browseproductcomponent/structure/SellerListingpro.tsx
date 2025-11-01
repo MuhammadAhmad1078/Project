@@ -1,15 +1,38 @@
 import { QuickViewModal } from '@/components/browseproductcomponent';
-// import { PmCards } from '@/components/businesshubcomponent'
-import { Heading } from '@/components/commoncomponents';
-// import { shoproductData } from '@/components/data/shoproductData';
-import React, { useState } from 'react'
+import { PmCards } from '@/components/businesshubcomponent'
+import { Heading, Text } from '@/components/commoncomponents';
+import React, { useState, useEffect } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import { GET_MY_LISTING_PRODUCT } from '@/graphql/query/sellerDashboard'
 
 const SellerListingpro = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
-    // const [currentProductList, setCurrentProductList] = useState<typeof shoproductData>([]);
 
-    // const data = shoproductData.slice(0, 4)
+    const [loadProducts, { data, loading, error }] = useLazyQuery(
+        GET_MY_LISTING_PRODUCT,
+        {
+            fetchPolicy: "cache-and-network",
+            variables: { offset: 0, limit: 20, sortBy: "createdAt" }
+        }
+    )
+
+    useEffect(() => {
+        loadProducts()
+    }, [loadProducts])
+
+    // Transform data to match PmCards format
+    const transformedData = data?.getListedProducts?.map((product: any) => ({
+        id: typeof product.id === 'string' ? parseInt(product.id) : product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        dollaramount: product.price,
+        images: product.images,
+        category: product.category,
+        type: product.type,
+        discount: product.discount
+    })) || []
 
     return (
         <div className='mt-5'>
