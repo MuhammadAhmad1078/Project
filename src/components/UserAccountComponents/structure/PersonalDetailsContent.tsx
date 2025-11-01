@@ -1,11 +1,36 @@
 import React, { useState } from 'react';
 import { HeadWithBtn, MyCard, Text } from '@/components/commoncomponents';
-import { personalData } from '@/components/data/personalData';
 import { EditPersonalDetails } from './EditPersonalDetails';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const PersonalDetailsContent = () => {
 
     const [ edit, setEdit ] = useState<boolean>(false)
+    const { user } = useAuthStore()
+
+    // Build personal data from user object
+    const personalData = [
+        {
+            title: 'Full Name',
+            desc: user?.userName || 'Not provided'
+        },
+        {
+            title: 'Email Address',
+            desc: user?.email || 'Not provided'
+        },
+        {
+            title: 'Mobile Number',
+            desc: 'Not provided'
+        },
+        {
+            title: 'Birthday',
+            desc: 'Not provided'
+        },
+        {
+            title: 'Gender',
+            desc: 'Not provided'
+        },
+    ]
 
     return (
         <div>
