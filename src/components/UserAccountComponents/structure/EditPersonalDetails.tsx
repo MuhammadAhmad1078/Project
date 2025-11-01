@@ -86,6 +86,20 @@ const EditPersonalDetails: React.FC<EditProps> = ({setEdit}) => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="space-y-6">
+                    {/* Success Message */}
+                    {successMessage && (
+                        <div className="p-4 bg-green-900/20 border border-green-500 rounded">
+                            <p className="text-green-400 text-sm">{successMessage}</p>
+                        </div>
+                    )}
+
+                    {/* Error Message */}
+                    {errorMessage && (
+                        <div className="p-4 bg-red-900/20 border border-red-500 rounded">
+                            <p className="text-red-400 text-sm">{errorMessage}</p>
+                        </div>
+                    )}
+
                     <div className='grid md:grid-cols-2 grid-cols-1 gap-3 text-white'>
                         <MyInput 
                             name="fullName" 
