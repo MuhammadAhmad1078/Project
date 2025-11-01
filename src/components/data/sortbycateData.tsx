@@ -1,0 +1,32 @@
+export const sortbycateData = [
+    {
+        img:'p-1.png',
+        title:'Watches',
+        path:''
+    },
+    {
+        img:'p-4.png',
+        title:'Mobile Phone',
+        path:''
+    },
+    {
+        img:'head-1.png',
+        title:'Headphones',
+        path:''
+    },
+    {
+        img:'p-3.png',
+        title:'Camera',
+        path:''
+    },
+    {
+        img:'p-2.png',
+        title:'Earbuds',
+        path:''
+    },
+    {
+        img:'tab.png',
+        title:'Tablet',
+        path:''
+    },
+]

@@ -1,0 +1,35 @@
+export const favoriteproductData = [
+  {
+    id: 1,
+    pimg: "/assets/images/ip-2.png",
+    name: "Wireless Headphones",
+    description: "High-quality noise-cancelling wireless headphones with long battery life.",
+    rate: 5,
+    totalrate: 250,
+    price: 12000,
+    dollaramount: 80,
+    images: [
+      { id: "1a", url: "/assets/images/ip-1.png" },
+      { id: "1b", url: "/assets/images/ip-2.png" },
+      { id: "1c", url: "/assets/images/ip-3.png" },
+    ],
+    reviewCount: 180,
+    avgRating: 5,
+  },
+  {
+    id: 2,
+    pimg: "/assets/images/ip-3.png",
+    name: "Leather Wallet",
+    description: "Premium quality leather wallet with multiple compartments for cards and cash.",
+    rate: 4,
+    totalrate: 120,
+    price: 3500,
+    dollaramount: 25,
+    images: [
+      { id: "2a", url: "/assets/images/ip-1.png" },
+      { id: "2b", url: "/assets/images/ip-2.png" },
+    ],
+    reviewCount: 95,
+    avgRating: 4,
+  },
+];
