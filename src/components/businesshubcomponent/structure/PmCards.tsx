@@ -205,34 +205,49 @@ const PmCards: React.FC<proCard> = ({ data, sizes, path, link }) => {
               <div className="flex items-center justify-center gap-5">
                 {path?.cart && (
                   <Button
-                    onClick={() => router.push(path.cart || "")}
-                    className="w-8 h-8 group-hover:scale-100 scale-0 bg-white p-2 rounded-full flex items-center justify-center hover:bg-[#0C666A] transition-all duration-300 hovereffect"
+                    onClick={(e) => handleAddToCart(items.id, e)}
+                    disabled={loadingItems[items.id]?.cart}
+                    className="w-8 h-8 group-hover:scale-100 scale-0 bg-white p-2 rounded-full flex items-center justify-center hover:bg-[#0C666A] transition-all duration-300 hovereffect disabled:opacity-50"
+                    title="Add to Cart"
                   >
-                    <img
-                      src="/assets/icons/cart.png"
-                      className="w-6"
-                      alt="cart"
-                    />
+                    {loadingItems[items.id]?.cart ? (
+                      <span className="text-xs">...</span>
+                    ) : (
+                      <img
+                        src="/assets/icons/cart.png"
+                        className="w-6"
+                        alt="cart"
+                      />
+                    )}
                   </Button>
                 )}
                 {path?.wishlist && (
                   <Button
-                    onClick={() => router.push(path?.wishlist || "")}
-                    className="w-8 h-8 group-hover:scale-100 scale-0 bg-white p-2 rounded-full flex items-center justify-center hover:bg-[#0C666A] transition-all duration-300 hovereffect"
+                    onClick={(e) => handleAddToWishlist(items.id, e)}
+                    disabled={loadingItems[items.id]?.wishlist}
+                    className="w-8 h-8 group-hover:scale-100 scale-0 bg-white p-2 rounded-full flex items-center justify-center hover:bg-[#0C666A] transition-all duration-300 hovereffect disabled:opacity-50"
+                    title="Add to Wishlist"
                   >
-                    <img
-                      src="/assets/icons/wish-w.png"
-                      className="w-6"
-                      alt="wishlist"
-                    />
+                    {loadingItems[items.id]?.wishlist ? (
+                      <span className="text-xs">...</span>
+                    ) : (
+                      <img
+                        src="/assets/icons/wish-w.png"
+                        className="w-6"
+                        alt="wishlist"
+                      />
+                    )}
                   </Button>
                 )}
                 {path?.view && (
                   <Button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
                       path?.view?.(items?.id);
                     }}
                     className="w-8 h-8 group-hover:scale-100 scale-0 bg-white p-2 rounded-full flex items-center justify-center hover:bg-[#0C666A] transition-all duration-300 hovereffect"
+                    title="Quick View"
                   >
                     <img
                       src="/assets/icons/eye.png"
