@@ -57,7 +57,15 @@ type proCard = {
 
 const PmCards: React.FC<proCard> = ({ data, sizes, path, link }) => {
   const router = useRouter();
-  console.log(data);
+  const [loadingItems, setLoadingItems] = useState<{ [key: number]: { cart?: boolean; wishlist?: boolean } }>({});
+
+  const [addToCart] = useMutation(ADD_TO_CART, {
+    refetchQueries: [{ query: GET_CART }],
+  });
+
+  const [addToWishlist] = useMutation(ADD_TO_WISHLIST, {
+    refetchQueries: [{ query: GET_WISHLIST }],
+  });
 
   const defaultClasses: Required<SizeClasses> = {
     cardcs: "bg-[#152122] rounded-lg border-[#57532E] py-4",
@@ -76,6 +84,47 @@ const PmCards: React.FC<proCard> = ({ data, sizes, path, link }) => {
   };
 
   const hasHoverAction = path && (path.cart || path.view || path.wishlist);
+
+  const handleAddToCart = async (productId: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setLoadingItems(prev => ({ ...prev, [productId]: { ...prev[productId], cart: true } }));
+
+    try {
+      await addToCart({
+        variables: {
+          productId: String(productId),
+          quantity: 1,
+        },
+      });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Failed to add to cart");
+    } finally {
+      setLoadingItems(prev => ({ ...prev, [productId]: { ...prev[productId], cart: false } }));
+    }
+  };
+
+  const handleAddToWishlist = async (productId: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setLoadingItems(prev => ({ ...prev, [productId]: { ...prev[productId], wishlist: true } }));
+
+    try {
+      await addToWishlist({
+        variables: {
+          productId: String(productId),
+        },
+      });
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      alert("Failed to add to wishlist");
+    } finally {
+      setLoadingItems(prev => ({ ...prev, [productId]: { ...prev[productId], wishlist: false } }));
+    }
+  };
 
   return (
     <>
