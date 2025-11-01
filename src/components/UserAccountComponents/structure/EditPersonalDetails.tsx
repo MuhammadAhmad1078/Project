@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form } from '@/components/ui/form'
 import { useForm } from "react-hook-form"
 import { ButtonSecondary, ButtonSecondaryOutline, MyDatePicker, MyInput, MySelect } from '@/components/commoncomponents'
+import { useMutation } from '@apollo/client'
+import { UPDATE_USER_PROFILE } from '@/graphql/mutation/mutations'
+import { useAuthStore } from '@/store/useAuthStore'
 
 
 interface FormValues {
@@ -18,10 +21,64 @@ interface EditProps{
 }
 
 const EditPersonalDetails: React.FC<EditProps> = ({setEdit}) => {
-    const form = useForm<FormValues>()
+    const { user } = useAuthStore()
+    const [updateUser, { loading, error }] = useMutation(UPDATE_USER_PROFILE)
+    const [successMessage, setSuccessMessage] = useState<string>('')
+    const [errorMessage, setErrorMessage] = useState<string>('')
 
-    const onSubmit = (data: FormValues) => {
-        console.log('Form data:', data)
+    const form = useForm<FormValues>({
+        defaultValues: {
+            fullName: user?.userName || '',
+            email: user?.email || '',
+            phoneNo: '',
+            gender: '',
+            birthDate: null as any,
+        }
+    })
+
+    const onSubmit = async (data: FormValues) => {
+        // Clear previous messages
+        setSuccessMessage('')
+        setErrorMessage('')
+
+        // Validation
+        if (!data.fullName || data.fullName.length < 2) {
+            setErrorMessage('Full name must be at least 2 characters')
+            return
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!data.email || !emailRegex.test(data.email)) {
+            setErrorMessage('Please enter a valid email address')
+            return
+        }
+
+        try {
+            await updateUser({
+                variables: {
+                    input: {
+                        userName: data.fullName,
+                        email: data.email
+                    }
+                }
+            })
+
+            setSuccessMessage('Profile updated successfully')
+
+            // Close edit mode after 1 second
+            setTimeout(() => {
+                setEdit(false)
+            }, 1000)
+        } catch (err: any) {
+            if (err.message?.includes('token') || err.message?.includes('auth')) {
+                setErrorMessage('Session expired. Please log in again.')
+            } else if (err.message?.includes('Network')) {
+                setErrorMessage('Network error. Please try again.')
+            } else {
+                setErrorMessage(err.message || 'Something went wrong. Please try again.')
+            }
+        }
     }
     // const [date, setDate] = useState<Date | null>(null);
 
