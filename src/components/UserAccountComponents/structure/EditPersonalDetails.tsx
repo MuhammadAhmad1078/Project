@@ -142,11 +142,19 @@ const EditPersonalDetails: React.FC<EditProps> = ({setEdit}) => {
                         />
                     </div>         
                     <div className='flex justify-end gap-5'>
-                        <ButtonSecondaryOutline className='rounded-xs' onClick={()=>setEdit(false)}>
+                        <ButtonSecondaryOutline
+                            className='rounded-xs'
+                            onClick={()=>setEdit(false)}
+                            type="button"
+                        >
                             Cancel
                         </ButtonSecondaryOutline>
-                        <ButtonSecondary type='submit' className='rounded-xs'>
-                            Save
+                        <ButtonSecondary
+                            type='submit'
+                            className='rounded-xs'
+                            disabled={loading}
+                        >
+                            {loading ? 'Saving...' : 'Save'}
                         </ButtonSecondary>
                     </div>                    
                 </div>
