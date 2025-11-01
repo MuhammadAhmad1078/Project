@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Table,
   TableBody,
   TableCell,
   TableRow,
 } from "@/components/ui/table"
-import { orderhistoryData } from '@/components/data'
-import { CustomPagination } from '@/components/commoncomponents';
+import { CustomPagination, Text } from '@/components/commoncomponents';
 import { OrderhistoryDetail } from './OrderhistoryDetail';
+import { useLazyQuery } from '@apollo/client';
+import { GET_PROFILE_ORDER } from '@/graphql/query/sellerDashboard';
 
 interface Props {
     showdetail: boolean;
@@ -18,6 +19,40 @@ const OrderhistoryTable:React.FC<Props> = ({showdetail, setShowDetail}) => {
 
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null);
+
+    const [loadOrders, { data: ordersData, loading }] = useLazyQuery(GET_PROFILE_ORDER, {
+        fetchPolicy: "cache-and-network",
+    });
+
+    useEffect(() => {
+        loadOrders({
+            variables: {
+                isSeller: false, // User is a buyer
+                offset: (page - 1) * rowsPerPage,
+                limit: rowsPerPage,
+            },
+        });
+    }, [loadOrders, page, rowsPerPage]);
+
+    const orders = ordersData?.getProfileOrders?.orders || [];
+    const totalOrders = ordersData?.getProfileOrders?.totalCount || 0;
+    const totalPages = Math.ceil(totalOrders / rowsPerPage);
+
+    const getStatusDisplay = (status: string) => {
+        const statusMap: any = {
+            'PENDING': { bg: 'bg-[#112338]', text: 'text-[#466FF7]', label: 'To Ship' },
+            'SHIPPED': { bg: 'bg-[#0C3021]', text: 'text-[#22C55E]', label: 'To Received' },
+            'DELIVERED': { bg: 'bg-[#2C221C]', text: 'text-[#F5693D]', label: 'To Review' },
+            'CANCELLED': { bg: 'bg-[#2A3536]', text: 'text-[#E8E8E8]', label: 'Cancelled' },
+        };
+        return statusMap[status] || statusMap['PENDING'];
+    };
+
+    const handleOrderClick = (order: any) => {
+        setSelectedOrder(order);
+        setShowDetail(true);
+    };
     return (
         <div className='w-full overflow-x-auto mt-3'>
             {
