@@ -101,23 +101,28 @@ const EditPersonalDetails: React.FC<EditProps> = ({setEdit}) => {
                     )}
 
                     <div className='grid md:grid-cols-2 grid-cols-1 gap-3 text-white'>
-                        <MyInput 
-                            name="fullName" 
-                            label="Full name" 
-                            required 
+                        <MyInput
+                            name="fullName"
+                            label="Full name"
+                            required
                             message='Please enter full name'
 
                         />
-                        <MyInput 
-                            name="email" 
-                            label="Email" 
-                            required 
+                        <MyInput
+                            name="email"
+                            label="Email"
+                            required
                             message='Please enter email'
                         />
-                        <MyInput 
-                            name="phoneNo" 
-                            label="Phone Number" 
-                            required 
+                        <div className="md:col-span-2">
+                            <p className="text-sm text-[#777E90] mb-2">
+                                Note: Phone number, birthday, and gender fields will be saved once backend supports them.
+                            </p>
+                        </div>
+                        <MyInput
+                            name="phoneNo"
+                            label="Phone Number"
+                            required
                             message='Please enter phone number'
                         />
                         <MySelect 
