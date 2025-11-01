@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,6 +9,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { randomImage } from "@/lib/utils";
+import { useMutation } from "@apollo/client";
+import { ADD_TO_CART } from "@/graphql/mutation/cartMutations";
+import { ADD_TO_WISHLIST } from "@/graphql/mutation/wishlistMutations";
+import { GET_CART } from "@/graphql/query/cartQuery";
+import { GET_WISHLIST } from "@/graphql/query/wishlistQuery";
 
 type CardItem = {
   id: number;
